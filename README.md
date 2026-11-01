@@ -100,6 +100,6 @@ cd [your-repo-name]
 
 <div align="center">
 
-**Developed by [Your Name]** · [Course / Institution] · [Year]
+**Developed by Prabhat Kumar** · Chandigarh University · 2026
 
 </div>
