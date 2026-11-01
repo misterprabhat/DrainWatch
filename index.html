@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b4938" />
+    <title>
+      An Integrated, Community-Driven Platform for Drainage Resolution &amp;
+      Greywater Management
+    </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      crossorigin=""
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      crossorigin=""
+    ></script>
+  </head>
+  <body>
+    <header class="topbar">
+      <a
+        class="brand"
+        href="#"
+        onclick="
+          switchView('dashboard-view');
+          return false;
+        "
+        aria-label="DrainWatch home"
+        ><span class="brand-mark" aria-hidden="true"
+          ><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="dwhd" x1="0.2" y1="0" x2="0.8" y2="1">
+                <stop offset="0" stop-color="#7ff0c2" />
+                <stop offset="0.55" stop-color="#25b583" />
+                <stop offset="1" stop-color="#0a5c43" />
+              </linearGradient>
+              <linearGradient id="dwhl" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#e9fff3" />
+                <stop offset="1" stop-color="#9fe7bf" />
+              </linearGradient>
+              <clipPath id="dwhc">
+                <path
+                  d="M32 5C32 5 12 26 12 40a20 20 0 0 0 40 0C52 26 32 5 32 5Z"
+                />
+              </clipPath>
+            </defs>
+            <path
+              d="M32 5C32 5 12 26 12 40a20 20 0 0 0 40 0C52 26 32 5 32 5Z"
+              fill="url(#dwhd)"
+            />
+            <g clip-path="url(#dwhc)">
+              <path
+                d="M8 47c6-4 10-4 16 0s10 4 16 0 10-4 16 0v20H8Z"
+                fill="#06432f"
+                opacity=".55"
+              />
+              <path
+                d="M8 52c6-4 10-4 16 0s10 4 16 0 10-4 16 0"
+                fill="none"
+                stroke="#bff5d8"
+                stroke-width="2"
+                stroke-linecap="round"
+                opacity=".8"
+              />
+            </g>
+            <path
+              d="M32 18c9 3 14 11 11 20-8 1-15-3-17-10-.8-4 1-8 6-10Z"
+              fill="url(#dwhl)"
+            />
+            <path
+              d="M30 41c2-7 6-12 11-16"
+              fill="none"
+              stroke="#0b6046"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <path
+              d="M19 22c1.5-2 3-3.5 5-4.6"
+              fill="none"
+              stroke="#fff"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              opacity=".55"
+            /></svg></span
+        ><span><strong>DrainWatch</strong></span></a
+      >
+      <div class="nav-links">
+        <button
+          class="nav-item active-nav"
+          id="nav-dashboard"
+          data-view="dashboard-view"
+          onclick="switchView('dashboard-view')"
+        >
+          <i class="ph-fill ph-squares-four"></i> Live Dashboard
+        </button>
+        <button
+          class="nav-item"
+          id="nav-greywater"
+          data-view="greywater-view"
+          onclick="switchView('greywater-view')"
+        >
+          <i class="ph-fill ph-drop"></i> Greywater Management
+        </button>
+      </div>
+    </header>
+    <main>
+      <section id="dashboard-view" class="view">
+        <section class="hero">
+          <div class="hero-orb orb-one"></div>
+          <div class="hero-orb orb-two"></div>
+          <div class="hero-copy">
+            <div class="eyebrow">
+              <span class="live-dot"></span> COMMUNITY WATERCARE · MOHALI
+            </div>
+            <h1>Small actions.<br /><em>Cleaner streets.</em></h1>
+            <p>
+              Help keep neighbourhood drains clear. Share a local issue, follow
+              community reports, and make monsoon readiness a shared effort.
+            </p>
+            <div class="hero-actions">
+              <button
+                class="button button-light"
+                onclick="
+                  document
+                    .getElementById('report-card')
+                    .scrollIntoView({ behavior: 'smooth' })
+                "
+              >
+                Report a drain issue
+                <i class="ph ph-arrow-up-right"></i></button
+              ><button
+                class="button button-quiet"
+                onclick="switchView('greywater-view')"
+              >
+                Explore water reuse <i class="ph ph-arrow-right"></i>
+              </button>
+            </div>
+            <div class="hero-meta">
+              <span><i class="ph ph-map-pin"></i> Mohali localities</span
+              ><span><i class="ph ph-leaf"></i> Cleaner water habits</span>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="art-ring ring-a"></div>
+            <div class="art-ring ring-b"></div>
+            <div class="art-drop"><i class="ph-fill ph-drop"></i></div>
+            <div class="art-leaf leaf-a"><i class="ph-fill ph-leaf"></i></div>
+            <div class="art-leaf leaf-b"><i class="ph-fill ph-leaf"></i></div>
+            <div class="art-caption">
+              <span class="caption-icon"
+                ><i class="ph-fill ph-sparkle"></i></span
+              ><span
+                ><strong>Better streets begin locally</strong
+                ><small>Notice it · Report it · Improve it</small></span
+              >
+            </div>
+          </div>
+          <div class="hero-bottom">
+            <span>01 <b>Spot a problem</b></span
+            ><span class="hero-line"></span
+            ><span>02 <b>Share the location</b></span
+            ><span class="hero-line"></span
+            ><span>03 <b>Support local action</b></span>
+          </div>
+        </section>
+
+        <section class="stats-grid" aria-label="Community report summary">
+          <article class="stat-card">
+            <span class="stat-icon coral"
+              ><i class="ph ph-warning-circle"></i
+            ></span>
+            <div>
+              <small>Needs attention</small><strong id="stat-critical">0</strong
+              ><span>High-concern reports</span>
+            </div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon mint"
+              ><i class="ph ph-check-circle"></i
+            ></span>
+            <div>
+              <small>Marked clear</small><strong id="stat-cleared">0</strong
+              ><span>Resolved reports</span>
+            </div>
+          </article>
+          <article class="stat-card">
+            <span class="stat-icon sage"><i class="ph ph-map-pin"></i></span>
+            <div>
+              <small>Local coverage</small
+              ><strong>8<span class="stat-unit"> areas</span></strong
+              ><span>Across Mohali</span>
+            </div>
+          </article>
+        </section>
+
+        <div class="dashboard-grid">
+          <section class="panel report-panel" id="report-card">
+            <div class="section-heading">
+              <div>
+                <span class="section-kicker">COMMUNITY REPORT</span>
+                <h2>Tell us what you spotted</h2>
+                <p>
+                  A simple report helps highlight where attention may be needed.
+                </p>
+              </div>
+              <span class="heading-icon"
+                ><i class="ph ph-note-pencil"></i
+              ></span>
+            </div>
+            <form id="report-form" onsubmit="handleReportSubmission(event)">
+              <div class="form-row">
+                <label
+                  >Area in Mohali<select id="form-phase" required>
+                    <option value="Phase 3B2 Market">Phase 3B2 Market</option>
+                    <option value="Phase 5 Market">Phase 5 Market</option>
+                    <option value="Phase 7 Market">Phase 7 Market</option>
+                    <option value="Sector 70, Mohali">Sector 70</option>
+                    <option value="Sector 69, Mohali">Sector 69</option>
+                    <option value="Sohana / Sector 77">Sohana</option>
+                    <option value="Balongi">Balongi</option>
+                    <option value="Kumbra">Kumbra</option>
+                    <option value="Other area in Mohali">
+                      Other area in Mohali
+                    </option>
+                  </select></label
+                ><label
+                  >Nearest landmark<input
+                    id="form-landmark"
+                    required
+                    maxlength="100"
+                    placeholder="e.g. near the market entrance"
+                /></label>
+              </div>
+              <label
+                >What is the issue?<span class="field-hint"
+                  >Choose the closest match.</span
+                ></label
+              >
+              <div class="issue-options">
+                <label class="issue-choice"
+                  ><input
+                    type="radio"
+                    name="issue"
+                    value="Blocked drain"
+                    checked
+                  /><span
+                    ><i class="ph ph-prohibit-inset"></i
+                    ><b>Blocked drain</b></span
+                  ></label
+                ><label class="issue-choice"
+                  ><input
+                    type="radio"
+                    name="issue"
+                    value="Water standing"
+                  /><span
+                    ><i class="ph ph-drop"></i><b>Standing water</b></span
+                  ></label
+                ><label class="issue-choice"
+                  ><input
+                    type="radio"
+                    name="issue"
+                    value="Damaged cover"
+                  /><span
+                    ><i class="ph ph-warning"></i><b>Damaged cover</b></span
+                  ></label
+                ><label class="issue-choice"
+                  ><input
+                    type="radio"
+                    name="issue"
+                    value="Litter nearby"
+                  /><span
+                    ><i class="ph ph-trash"></i><b>Litter nearby</b></span
+                  ></label
+                >
+              </div>
+              <label
+                >Extra details <span class="field-optional">Optional</span
+                ><textarea
+                  id="form-notes"
+                  rows="3"
+                  maxlength="280"
+                  placeholder="Add a short description to help someone find the spot…"
+                ></textarea>
+              </label>
+              <button class="button button-primary submit-button" type="submit">
+                Add community report <i class="ph ph-arrow-up-right"></i>
+              </button>
+            </form>
+          </section>
+
+          <div class="right-column">
+            <section class="panel map-panel">
+              <div class="section-heading compact">
+                <div>
+                  <span class="section-kicker">LOCAL VIEW</span>
+                  <h2>Mohali report map</h2>
+                </div>
+                <button class="text-button" onclick="centerMohali()">
+                  Recenter <i class="ph ph-arrow-counter-clockwise"></i>
+                </button>
+              </div>
+              <div id="mohali-map" aria-label="Map of report locations"></div>
+              <div class="map-foot">
+                <span><i class="map-dot dot-red"></i> Needs attention</span
+                ><span><i class="map-dot dot-green"></i> Marked clear</span>
+              </div>
+            </section>
+            <section class="panel feed-panel">
+              <div class="section-heading compact">
+                <div>
+                  <span class="section-kicker">NEIGHBOURHOOD UPDATES</span>
+                  <h2>Recent reports</h2>
+                  <p>Follow local reports and update their status.</p>
+                </div>
+                <select
+                  id="feed-filter"
+                  aria-label="Filter reports"
+                  onchange="handleFilterChange(this.value)"
+                >
+                  <option value="all">All areas</option>
+                  <option value="Phase 3B2">Phase 3B2</option>
+                  <option value="Phase 5">Phase 5</option>
+                  <option value="Phase 7">Phase 7</option>
+                  <option value="Sector 70">Sector 70</option>
+                </select>
+              </div>
+              <div id="hotspot-list" class="hotspot-list"></div>
+            </section>
+          </div>
+        </div>
+      </section>
+
+      <section id="greywater-view" class="view hidden">
+        <div class="water-intro">
+          <div>
+            <span class="section-kicker">THE SIMPLE IDEA</span>
+            <h2>From used water to useful water</h2>
+            <p>
+              Greywater is different from toilet wastewater. It is not
+              automatically safe, so choose the source and reuse method
+              carefully.
+            </p>
+          </div>
+          <div class="source-pills">
+            <span><i class="ph ph-check-circle"></i> Bath & shower</span
+            ><span><i class="ph ph-check-circle"></i> Bathroom sink</span
+            ><span><i class="ph ph-check-circle"></i> Laundry rinse water</span
+            ><span class="avoid"
+              ><i class="ph ph-x-circle"></i> Toilet wastewater</span
+            >
+          </div>
+        </div>
+
+        <section class="reuse-section">
+          <div class="section-heading">
+            <div>
+              <span class="section-kicker">PRACTICAL IDEAS</span>
+              <h2>Choose a place to start</h2>
+              <p>Tap a card to see simple steps and important precautions.</p>
+            </div>
+          </div>
+          <div class="reuse-cards">
+            <button
+              class="reuse-card selected"
+              data-reuse="plants"
+              onclick="selectReuse('plants', this)"
+            >
+              <span class="reuse-icon"><i class="ph ph-plant"></i></span
+              ><span class="reuse-card-title">Water ornamental plants</span
+              ><span class="reuse-card-copy"
+                >Use suitable water at the soil level.</span
+              ><i class="ph ph-arrow-up-right card-arrow"></i>
+            </button>
+            <button
+              class="reuse-card"
+              data-reuse="laundry"
+              onclick="selectReuse('laundry', this)"
+            >
+              <span class="reuse-icon"
+                ><i class="ph ph-washing-machine"></i></span
+              ><span class="reuse-card-title">Reuse laundry water</span
+              ><span class="reuse-card-copy"
+                >Begin with a small, supervised setup.</span
+              ><i class="ph ph-arrow-up-right card-arrow"></i>
+            </button>
+            <button
+              class="reuse-card"
+              data-reuse="cleaning"
+              onclick="selectReuse('cleaning', this)"
+            >
+              <span class="reuse-icon"><i class="ph ph-broom"></i></span
+              ><span class="reuse-card-title">Outdoor cleaning</span
+              ><span class="reuse-card-copy"
+                >Use only where the water is appropriate.</span
+              ><i class="ph ph-arrow-up-right card-arrow"></i>
+            </button>
+          </div>
+          <div class="reuse-detail" id="reuse-detail" aria-live="polite">
+            <div class="detail-number">01</div>
+            <div class="detail-copy">
+              <span class="section-kicker">A GOOD FIRST STEP</span>
+              <h3 id="reuse-detail-title">Water ornamental plants</h3>
+              <p id="reuse-detail-text">
+                Use suitable greywater promptly and apply it to the soil around
+                established ornamental plants, not directly onto leaves. Avoid
+                pooling and check that your detergent is plant-friendly.
+              </p>
+              <div class="detail-tip">
+                <i class="ph-fill ph-lightbulb"></i
+                ><span id="reuse-detail-tip"
+                  >Keep the water below the leaves and let it soak into the
+                  soil. Do not use greywater on edible leaves or root
+                  vegetables.</span
+                >
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="savings-layout">
+          <div class="savings-card">
+            <span class="section-kicker">YOUR WATER-SAVING ESTIMATE</span>
+            <h2>What could you reuse?</h2>
+            <p>
+              Adjust the amount of suitable greywater you might collect each
+              day. This is an estimate, not a guaranteed saving.
+            </p>
+            <div class="range-label">
+              <label for="water-litres">Greywater collected per day</label
+              ><strong><span id="litre-value">20</span> L</strong>
+            </div>
+            <input
+              type="range"
+              id="water-litres"
+              min="0"
+              max="100"
+              step="5"
+              value="20"
+              oninput="updateWaterEstimate(this.value)"
+            />
+            <div class="range-ticks">
+              <span>0 L</span><span>50 L</span><span>100 L</span>
+            </div>
+            <div class="estimate-results">
+              <div>
+                <small>Per week</small
+                ><strong><span id="weekly-value">140</span> L</strong>
+              </div>
+              <div>
+                <small>Over 30 days</small
+                ><strong><span id="monthly-value">600</span> L</strong>
+              </div>
+            </div>
+            <p class="estimate-foot">
+              <i class="ph ph-info"></i> Actual reuse depends on water quality,
+              household needs, and safe disposal.
+            </p>
+          </div>
+          <div class="safety-card">
+            <div class="safety-title">
+              <span class="safety-icon"
+                ><i class="ph ph-shield-warning"></i
+              ></span>
+              <div>
+                <span class="section-kicker">KEEP IT SAFE</span>
+                <h2>Three rules to remember</h2>
+              </div>
+            </div>
+            <div class="safety-rule">
+              <span>01</span>
+              <div>
+                <strong>Use it fresh</strong>
+                <p>
+                  Do not store untreated greywater for long periods. Use
+                  promptly and empty containers after use.
+                </p>
+              </div>
+            </div>
+            <div class="safety-rule">
+              <span>02</span>
+              <div>
+                <strong>Keep it off food crops</strong>
+                <p>
+                  Avoid applying it to edible leaves, root vegetables, or any
+                  part of food that people will eat.
+                </p>
+              </div>
+            </div>
+            <div class="safety-rule">
+              <span>03</span>
+              <div>
+                <strong>Choose mild products</strong>
+                <p>
+                  Avoid water with harsh cleaners, bleach, or detergents
+                  unsuitable for plants. Never drink greywater.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <div class="water-bottom-note">
+          <i class="ph-fill ph-leaf"></i>
+          <p>
+            <strong>Start small.</strong> A bucket used carefully for an
+            appropriate purpose can be a first step. For plumbing changes or
+            larger systems, check local rules and consult a qualified
+            professional.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <a
+        class="brand footer-brand"
+        href="#"
+        onclick="
+          switchView('dashboard-view');
+          return false;
+        "
+        ><span class="brand-mark" aria-hidden="true"
+          ><svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="dwfd" x1="0.2" y1="0" x2="0.8" y2="1">
+                <stop offset="0" stop-color="#7ff0c2" />
+                <stop offset="0.55" stop-color="#25b583" />
+                <stop offset="1" stop-color="#0a5c43" />
+              </linearGradient>
+              <linearGradient id="dwfl" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#e9fff3" />
+                <stop offset="1" stop-color="#9fe7bf" />
+              </linearGradient>
+              <clipPath id="dwfc">
+                <path
+                  d="M32 5C32 5 12 26 12 40a20 20 0 0 0 40 0C52 26 32 5 32 5Z"
+                />
+              </clipPath>
+            </defs>
+            <path
+              d="M32 5C32 5 12 26 12 40a20 20 0 0 0 40 0C52 26 32 5 32 5Z"
+              fill="url(#dwfd)"
+            />
+            <g clip-path="url(#dwfc)">
+              <path
+                d="M8 47c6-4 10-4 16 0s10 4 16 0 10-4 16 0v20H8Z"
+                fill="#06432f"
+                opacity=".55"
+              />
+              <path
+                d="M8 52c6-4 10-4 16 0s10 4 16 0 10-4 16 0"
+                fill="none"
+                stroke="#bff5d8"
+                stroke-width="2"
+                stroke-linecap="round"
+                opacity=".8"
+              />
+            </g>
+            <path
+              d="M32 18c9 3 14 11 11 20-8 1-15-3-17-10-.8-4 1-8 6-10Z"
+              fill="url(#dwfl)"
+            />
+            <path
+              d="M30 41c2-7 6-12 11-16"
+              fill="none"
+              stroke="#0b6046"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            />
+            <path
+              d="M19 22c1.5-2 3-3.5 5-4.6"
+              fill="none"
+              stroke="#fff"
+              stroke-width="2.4"
+              stroke-linecap="round"
+              opacity=".55"
+            /></svg></span
+        ><span><strong>DrainWatch</strong></span></a
+      >
+      <p>
+        An Integrated, Community-Driven Platform for Drainage Resolution &amp;
+        Greywater Management
+      </p>
+      <button class="footer-reset" onclick="resetData()">
+        <i class="ph ph-arrow-counter-clockwise"></i><span>Reset data</span>
+      </button>
+    </footer>
+    <div id="app-toast" class="toast" role="status">
+      <i id="toast-icon" class="ph-fill ph-check-circle"></i
+      ><span id="toast-text">Report updated.</span>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
